@@ -3,7 +3,7 @@ import { View, TextInput, Button, Text, Image } from 'react-native';
 import { auth, createUserWithEmailAndPassword } from '../firebase-config';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
-const firestore = getFirestore(); // إنشاء مرجع لقاعدة البيانات
+const firestore = getFirestore();
 
 const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -25,7 +25,7 @@ const RegisterScreen = ({ navigation }) => {
         medicalHistory,
       });
 
-      navigation.navigate('login'); // بعد التسجيل يذهب إلى شاشة تسجيل الدخول
+      navigation.navigate('login'); 
     } catch (error) {
       console.error('Error registering user:', error.message);
     }
