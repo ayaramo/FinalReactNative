@@ -10,12 +10,24 @@ const LoginScreen = ({ navigation }) => {
   const login = useAuthStore((state) => state.login); 
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      alert("من فضلك املأ جميع الحقول");
+      return;
+    }
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       login(userCredential.user); 
       navigation.navigate('home');
     } catch (error) {
       console.error('Error logging in: ', error.message);
+      if (error.code === 'auth/invalid-credential') {
+        alert('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+      }
+      if (error.code === 'auth/invalid-email') {
+        alert('صيغة البريد الإلكتروني غير صحيحة');
+      } else {
+        alert('حدث خطأ أثناء تسجيل الدخول، حاول مرة أخرى');
+      }    
     }
   };
 

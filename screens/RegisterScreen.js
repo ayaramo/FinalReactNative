@@ -13,6 +13,19 @@ const RegisterScreen = ({ navigation }) => {
   const [medicalHistory, setMedicalHistory] = useState('');
 
   const handleRegister = async () => {
+    if (!name || !email || !password || !age || !medicalHistory) {
+      alert("من فضلك املأ جميع الحقول");
+      return;
+    }
+    if (password.length < 6) {  
+      alert("يجب أن تكون كلمة المرور 6 أحرف على الأقل");       
+      return;
+    }                                                                 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("صيغة البريد الإلكتروني غير صحيحة");
+      return;
+    }
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
