@@ -219,11 +219,12 @@ const HomeScreen = ({ navigation }) => {
               احصل على أدويتك بسهولة وأمان من خلال صيدليتنا الإلكترونية
             </Text>
             <TouchableOpacity
-              style={styles.pharmacyButton}
-              onPress={() => navigation.navigate('Pharmacy')}
+            style={styles.pharmacyButton}
+            onPress={() => navigation.navigate('الصيدلية')}
             >
-              <Text style={styles.pharmacyButtonText}>تسوق الآن</Text>
+            <Text style={styles.pharmacyButtonText}>تسوق الآن</Text>
             </TouchableOpacity>
+
           </View>
         </View>
       </ScrollView>

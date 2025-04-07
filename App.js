@@ -10,7 +10,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 // import DoctorsScreen from './screens/DoctorsScreen';
-// import PharmacyScreen from './screens/PharmacyScreen';
+import PharmacyScreen from './screens/PharmacyScreen';
+import MedicinesScreen from './screens/MedicinesScreen';
 import MedicalContentScreen from './screens/MedicalContentScreen';
 // import ProfileScreen from './screens/ProfileScreen';
 
@@ -29,7 +30,7 @@ const MainApp = () => {
           } else if (route.name === 'الأطباء') {
             iconName = focused ? 'medical' : 'medical-outline';
           } else if (route.name === 'الصيدلية') {
-            iconName = focused ? 'medical-kit' : 'medical-kit-outline';
+            iconName = focused ? 'medkit' : 'medkit-outline';
           } else if (route.name === 'محتوى طبي') {
             iconName = focused ? 'book' : 'book-outline';
           } else if (route.name === 'حسابي') {
@@ -48,7 +49,7 @@ const MainApp = () => {
     >
       <Tab.Screen name="الرئيسية" component={HomeScreen} />
        {/* <Tab.Screen name="الأطباء" component={DoctorsScreen} /> */}
-      {/* <Tab.Screen name="الصيدلية" component={PharmacyScreen} /> */}
+      <Tab.Screen name="الصيدلية" component={PharmacyScreen} /> 
       <Tab.Screen name="محتوى طبي" component={MedicalContentScreen} />
       {/* <Tab.Screen name="حسابي" component={ProfileScreen} />  */}
     </Tab.Navigator>
@@ -84,6 +85,12 @@ export default function App() {
           name="home" 
           component={MainApp} 
         />
+        <Stack.Screen 
+        options={{ headerShown: false }} 
+        name="MedicinesScreen" 
+        component={MedicinesScreen} 
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
