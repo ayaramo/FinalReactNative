@@ -13,11 +13,10 @@ import HomeScreen from './screens/HomeScreen';
 import PharmacyScreen from './screens/PharmacyScreen';
 import MedicinesScreen from './screens/MedicinesScreen';
 import MedicalContentScreen from './screens/MedicalContentScreen';
-
+import MyChats from './screens/MyChats';
 import DoctorCalling from './screens/DoctorCalling';
 import DoctorsListPage from './screens/DoctorsListPage';
 import ChatScreen from './screens/ChatScreen';
-
 
 import ProfileScreen from './screens/ProfileScreen';
 import EditProfile from './screens/EditProfile';
@@ -26,6 +25,7 @@ import MyBookings from './screens/MyBookings';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// تبويب الصفحات الرئيسية داخل التطبيق بعد تسجيل الدخول
 const MainApp = () => {
   return (
     <Tab.Navigator
@@ -55,100 +55,65 @@ const MainApp = () => {
       })}
     >
       <Tab.Screen name="الرئيسية" component={HomeScreen} />
-
       <Tab.Screen name="الأطباء" component={DoctorCalling} />
       <Tab.Screen name="الصيدلية" component={PharmacyScreen} />
       <Tab.Screen name="محتوى طبي" component={MedicalContentScreen} />
-
-      {/* <Tab.Screen name="الأطباء" component={DoctorsScreen} /> */}
-      <Tab.Screen name="الصيدلية" component={PharmacyScreen} />
-      <Tab.Screen name="محتوى طبي" component={MedicalContentScreen} />
       <Tab.Screen name="حسابي" component={ProfileScreen} />
-
     </Tab.Navigator>
   );
 };
 
+// التطبيق الرئيسي
 export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="Welcome">
-
-        <Stack.Screen 
-          name="Welcome" 
-          component={WelcomeScreen} 
-          options={{ 
-            headerShown: false,
-            animation: "fade_from_bottom",
-          }} 
-        />
-        <Stack.Screen 
-          name="login" 
-          component={LoginScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="register" 
-          component={RegisterScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="home" 
-          component={MainApp} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="MedicinesScreen" 
-          component={MedicinesScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="DoctorsList" 
-          component={DoctorsListPage} 
-          options={{ 
-            headerShown: true,
-            title: 'قائمة الأطباء',
-            headerBackTitle: 'رجوع',
-          }} 
-        />
-        <Stack.Screen 
-          name="Chat" 
-          component={ChatScreen} 
-          options={{ 
-            headerShown: true,
-            title: 'الدردشة مع الطبيب',
-            headerBackTitle: 'رجوع',
-          }} 
-          />
         <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
           options={{
             headerShown: false,
             animation: "fade_from_bottom",
-            animationDuration: 3000
           }}
-          name="Welcome"
-          component={WelcomeScreen}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
           name="login"
           component={LoginScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
           name="register"
           component={RegisterScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
           name="home"
           component={MainApp}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-          options={{ headerShown: false }}
           name="MedicinesScreen"
           component={MedicinesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DoctorsList"
+          component={DoctorsListPage}
+          options={{
+            headerShown: true,
+            title: 'قائمة الأطباء',
+            headerBackTitle: 'رجوع',
+          }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{
+            headerShown: true,
+            title: 'الدردشة مع الطبيب',
+            headerBackTitle: 'رجوع',
+          }}
         />
         <Stack.Screen
           name="EditProfile"
@@ -159,8 +124,12 @@ export default function App() {
           name="MyBookings"
           component={MyBookings}
           options={{ headerShown: true, title: 'حجوزاتي' }}
-
         />
+        <Stack.Screen name="MyChats"
+          component={MyChats}
+          options={{ title: 'محادثاتي' }} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ title: 'الدردشة' }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
