@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Text,
   FlatList,
   StyleSheet,
   Image,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
   ScrollView,
   Dimensions
 } from 'react-native';
+import { Text, Surface, Searchbar, ActivityIndicator, useTheme, Button } from 'react-native-paper';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase-config';
 import { Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -57,6 +56,7 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('الكل');
   const [searchQuery, setSearchQuery] = useState('');
+  const theme = useTheme();
 
   useEffect(() => {
     fetchDoctors();
@@ -69,8 +69,7 @@ const HomeScreen = ({ navigation }) => {
         id: doc.id,
         ...doc.data()
       }));
-      console.log('Fetched doctors:', doctorsList);
-      setDoctors(doctorsList); // Show all doctors
+      setDoctors(doctorsList);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching doctors:', error);
@@ -79,33 +78,36 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const renderServiceCard = ({ item }) => (
-    <TouchableOpacity
-      style={[styles.serviceCard, { backgroundColor: item.color }]}
-      onPress={() => navigation.navigate(item.screen)}
-    >
-      <MaterialIcons name={item.icon} size={32} color="#fff" />
-      <Text style={styles.serviceTitle}>{item.title}</Text>
-    </TouchableOpacity>
+    <Surface style={[styles.serviceCard, { backgroundColor: item.color }]} elevation={4}>
+      <TouchableOpacity
+        style={styles.serviceCardContent}
+        onPress={() => navigation.navigate(item.screen)}
+      >
+        <MaterialIcons name={item.icon} size={32} color="#fff" />
+        <Text style={styles.serviceTitle}>{item.title}</Text>
+      </TouchableOpacity>
+    </Surface>
   );
 
   const renderDoctorCard = ({ item }) => (
-    <TouchableOpacity
-      style={styles.doctorCard}
-      onPress={() => navigation.navigate('DoctorDetails', { doctor: item })}
-    >
-      <Image
-        source={{ uri: item.image }}
-        style={styles.doctorImage}
-      />
-      <View style={styles.doctorInfo}>
-        <Text style={styles.doctorName}>د. {item.name}</Text>
-        <Text style={styles.specialty}>{item.specialty}</Text>
-        <View style={styles.ratingContainer}>
-          <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.rating}>{item.review || '4.5'}</Text>
+    <Surface style={styles.doctorCard} elevation={2}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('DoctorDetails', { doctor: item })}
+      >
+        <Image
+          source={{ uri: item.image }}
+          style={styles.doctorImage}
+        />
+        <View style={styles.doctorInfo}>
+          <Text variant="titleMedium" style={styles.doctorName}>د. {item.name}</Text>
+          <Text variant="bodyMedium" style={styles.specialty}>{item.specialty}</Text>
+          <View style={styles.ratingContainer}>
+            <Ionicons name="star" size={16} color="#FFD700" />
+            <Text variant="bodyMedium" style={styles.rating}>{item.review || '4.5'}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </Surface>
   );
 
   const filteredDoctors = doctors.filter(doctor => {
@@ -115,7 +117,6 @@ const HomeScreen = ({ navigation }) => {
     const specialty = doctor.specialty ? doctor.specialty : '';
     
     const matchesCategory = selectedCategory === 'الكل' || specialty === selectedCategory;
-    
     const matchesSearch = searchQuery === '' || 
                          name.includes(searchQuery.toLowerCase()) || 
                          specialty.toLowerCase().includes(searchQuery.toLowerCase());
@@ -127,106 +128,95 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+      <Surface style={styles.header} elevation={4}>
         <Image
           source={require('../assets/logo.png')}
           style={styles.logo}
         />
-        <Text style={styles.headerTitle}>MediCross</Text>
-      </View>
+        <Text variant="headlineSmall" style={styles.headerTitle}>MediCross</Text>
+      </Surface>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.aboutSection}>
-          <Text style={styles.aboutText}>
-             نقدم لك خدمات طبية متكاملة لتلبية احتياجاتك الصحية. احصل على أفضل رعاية طبية من خلال تطبيقنا.
+        <Surface style={styles.aboutSection} elevation={1}>
+          <Text variant="bodyLarge" style={styles.aboutText}>
+            نقدم لك خدمات طبية متكاملة لتلبية احتياجاتك الصحية. احصل على أفضل رعاية طبية من خلال تطبيقنا.
           </Text>
-        </View>
+        </Surface>
 
         <View style={styles.servicesSection}>
-          <Text style={styles.sectionTitle}>خدماتنا</Text>
+          <Text variant="titleLarge" style={styles.sectionTitle}>خدماتنا</Text>
           <View style={styles.servicesContainer}>
             {services.map(service => renderServiceCard({ item: service }))}
           </View>
         </View>
 
         <View style={styles.doctorsSection}>
-          <Text style={styles.sectionTitle}>أطباؤنا المميزون</Text>
-          {/* <View style={styles.searchContainer}>
-            <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="ابحث عن طبيب..."
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholderTextColor="#666"
-            />
-          </View> */}
+          <Text variant="titleLarge" style={styles.sectionTitle}>أطباؤنا المميزون</Text>
+          
+          <Searchbar
+            placeholder="ابحث عن طبيب..."
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            style={styles.searchbar}
+            iconColor={theme.colors.primary}
+          />
 
           <View style={styles.categoriesContainer}>
-            <FlatList
-              data={categories}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={[
-                    styles.categoryItem,
-                    selectedCategory === item && styles.selectedCategory
-                  ]}
-                  onPress={() => setSelectedCategory(item)}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  mode={selectedCategory === category ? "contained" : "outlined"}
+                  onPress={() => setSelectedCategory(category)}
+                  style={styles.categoryButton}
+                  labelStyle={styles.categoryButtonLabel}
                 >
-                  <Text style={[
-                    styles.categoryText,
-                    selectedCategory === item && styles.selectedCategoryText
-                  ]}>
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              keyExtractor={item => item}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.categoriesList}
-            />
+                  {category}
+                </Button>
+              ))}
+            </ScrollView>
           </View>
 
           {loading ? (
             <View style={styles.loadingContainer}>
-              <Text>جاري التحميل...</Text>
+              <ActivityIndicator size="large" color={theme.colors.primary} />
             </View>
           ) : displayedDoctors.length > 0 ? (
             <View style={styles.doctorsGrid}>
               {displayedDoctors.map(doctor => renderDoctorCard({ item: doctor }))}
             </View>
           ) : (
-            <View style={styles.noResultsContainer}>
-              <Text style={styles.noResultsText}>لا يوجد أطباء متاحين</Text>
-            </View>
+            <Surface style={styles.noResultsContainer} elevation={1}>
+              <Text variant="bodyLarge" style={styles.noResultsText}>لا يوجد أطباء متاحين</Text>
+            </Surface>
           )}
           
-          {/* View All Doctors Button */}
-          <TouchableOpacity 
-            style={styles.viewAllButton}
+          <Button
+            mode="contained"
             onPress={() => navigation.navigate('Doctors')}
+            style={styles.viewAllButton}
+            icon="arrow-right"
           >
-            <Text style={styles.viewAllButtonText}>عرض جميع الأطباء</Text>
-            <Ionicons name="arrow-forward" size={20} color="#fff" style={styles.viewAllIcon} />
-          </TouchableOpacity>
+            عرض جميع الأطباء
+          </Button>
         </View>
 
-        <View style={styles.pharmacySection}>
+        <Surface style={styles.pharmacySection} elevation={4}>
           <View style={styles.pharmacyContent}>
-            <Text style={styles.pharmacyTitle}>صيدليتنا</Text>
-            <Text style={styles.pharmacyText}>
+            <Text variant="headlineSmall" style={styles.pharmacyTitle}>صيدليتنا</Text>
+            <Text variant="bodyLarge" style={styles.pharmacyText}>
               احصل على أدويتك بسهولة وأمان من خلال صيدليتنا الإلكترونية
             </Text>
-            <TouchableOpacity
-            style={styles.pharmacyButton}
-            onPress={() => navigation.navigate('الصيدلية')}
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate('الصيدلية')}
+              style={styles.pharmacyButton}
+              icon="shopping"
             >
-            <Text style={styles.pharmacyButtonText}>تسوق الآن</Text>
-            </TouchableOpacity>
-
+              تسوق الآن
+            </Button>
           </View>
-        </View>
+        </Surface>
       </ScrollView>
     </SafeAreaView>
   );
@@ -236,151 +226,117 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    direction: 'rtl',
+  
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    direction: 'rtl',
     backgroundColor: '#2196F3',
-    justifyContent :'center',
+
   },
   logo: {
     width: 40,
     height: 40,
-    marginRight: 10,
+    marginRight: 8,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
     color: '#fff',
+    fontWeight: 'bold',
   },
   aboutSection: {
+    // margin: 16,
+    padding: 16,
+    // borderRadius: 8,
     backgroundColor: '#2196F3',
-    padding: 20,
-    alignItems: 'center',
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    height: 150,
-  },
-  aboutTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 10,
   },
   aboutText: {
-    fontSize: 16,
-    color: '#fff',
     textAlign: 'center',
-    lineHeight: 24,
+    color: '#fff',
   },
   servicesSection: {
     padding: 16,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
-    textAlign: 'left',
+    textAlign: 'right',
+    color: '#333',
   },
   servicesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+    direction: 'rtl',
+
   },
   serviceCard: {
-    width: (width - 48) / 3,
-    padding: 16,
+    width: width / 3.5,
+    aspectRatio: 1,
     borderRadius: 12,
-    alignItems: 'center',
     marginBottom: 16,
+  },
+  serviceCardContent: {
+    flex: 1,
+    padding: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   serviceTitle: {
     color: '#fff',
-    marginTop: 8,
-    textAlign: 'center',
     fontSize: 12,
+    textAlign: 'center',
+    marginTop: 8,
   },
-  doctorsSection: {
-    padding: 16,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 10,
+  searchbar: {
+    marginHorizontal: 16,
     marginBottom: 16,
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    textAlign: 'right',
+    elevation: 0,
+    backgroundColor: '#fff',
+
   },
   categoriesContainer: {
     marginBottom: 16,
-  },
-  categoriesList: {
     paddingHorizontal: 16,
+    direction: 'rtl',
+
   },
-  categoryItem: {
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-    marginRight: 10,
+  categoryButton: {
+    marginRight: 8,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
   },
-  selectedCategory: {
-    backgroundColor: '#2196F3',
-  },
-  categoryText: {
-    color: '#666',
-    fontSize: 14,
-  },
-  selectedCategoryText: {
-    color: '#fff',
+  categoryButtonLabel: {
+    fontSize: 12,
   },
   doctorsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
   doctorCard: {
-    width: (width - 48) / 2,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 12,
+    width: width / 2.2,
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderRadius: 12,
+    overflow: 'hidden',
+    direction: 'rtl',
+
   },
   doctorImage: {
     width: '100%',
-    height: 120,
-    borderRadius: 8,
-    marginBottom: 8,
+    height: 150,
   },
   doctorInfo: {
+    padding: 12,
+    textAlign: 'center',
     alignItems: 'center',
   },
   doctorName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
     marginBottom: 4,
   },
   specialty: {
-    fontSize: 14,
     color: '#666',
     marginBottom: 4,
   },
@@ -392,67 +348,44 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     color: '#666',
   },
-  pharmacySection: {
-    backgroundColor: '#E3F2FD',
-    padding: 20,
-    margin: 16,
-    borderRadius: 12,
-  },
-  pharmacyContent: {
-    alignItems: 'center',
-  },
-  pharmacyTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2196F3',
-    marginBottom: 8,
-  },
-  pharmacyText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  pharmacyButton: {
-    backgroundColor: '#2196F3',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 25,
-  },
-  pharmacyButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
   loadingContainer: {
-    padding: 20,
+    padding: 32,
     alignItems: 'center',
   },
   noResultsContainer: {
-    padding: 20,
+    padding: 32,
+    margin: 16,
     alignItems: 'center',
-  },
-  noResultsText: {
-    fontSize: 16,
-    color: '#666',
+    borderRadius: 8,
   },
   viewAllButton: {
+    margin: 16,
     backgroundColor: '#2196F3',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 16,
+
   },
-  viewAllButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  pharmacySection: {
+    margin: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#C6D6E2FF',
+    direction: 'rtl',
+
+  },
+  pharmacyContent: {
+    padding: 24,
+  },
+  pharmacyTitle: {
+    color: 'black',
+    marginBottom: 8,
     fontWeight: 'bold',
-    marginRight: 8,
   },
-  viewAllIcon: {
-    marginLeft: 4,
+  pharmacyText: {
+    color: 'black',
+    marginBottom: 16,
+  },
+  
+  pharmacyButton: {
+    backgroundColor: '#2196F3',
   },
 });
 

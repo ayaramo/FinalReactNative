@@ -13,9 +13,15 @@ import HomeScreen from './screens/HomeScreen';
 import PharmacyScreen from './screens/PharmacyScreen';
 import MedicinesScreen from './screens/MedicinesScreen';
 import MedicalContentScreen from './screens/MedicalContentScreen';
+
 import DoctorCalling from './screens/DoctorCalling';
 import DoctorsListPage from './screens/DoctorsListPage';
 import ChatScreen from './screens/ChatScreen';
+
+
+import ProfileScreen from './screens/ProfileScreen';
+import EditProfile from './screens/EditProfile';
+import MyBookings from './screens/MyBookings';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -43,14 +49,22 @@ const MainApp = () => {
         tabBarInactiveTintColor: 'gray',
         tabBarLabelStyle: {
           fontSize: 12,
+          direction: 'rtl',
         },
         headerShown: false,
       })}
     >
       <Tab.Screen name="الرئيسية" component={HomeScreen} />
+
       <Tab.Screen name="الأطباء" component={DoctorCalling} />
       <Tab.Screen name="الصيدلية" component={PharmacyScreen} />
       <Tab.Screen name="محتوى طبي" component={MedicalContentScreen} />
+
+      {/* <Tab.Screen name="الأطباء" component={DoctorsScreen} /> */}
+      <Tab.Screen name="الصيدلية" component={PharmacyScreen} />
+      <Tab.Screen name="محتوى طبي" component={MedicalContentScreen} />
+      <Tab.Screen name="حسابي" component={ProfileScreen} />
+
     </Tab.Navigator>
   );
 };
@@ -60,6 +74,7 @@ export default function App() {
     <NavigationContainer>
       <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="Welcome">
+
         <Stack.Screen 
           name="Welcome" 
           component={WelcomeScreen} 
@@ -105,6 +120,46 @@ export default function App() {
             title: 'الدردشة مع الطبيب',
             headerBackTitle: 'رجوع',
           }} 
+          />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+            animation: "fade_from_bottom",
+            animationDuration: 3000
+          }}
+          name="Welcome"
+          component={WelcomeScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="login"
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="register"
+          component={RegisterScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="home"
+          component={MainApp}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="MedicinesScreen"
+          component={MedicinesScreen}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{ title: 'تعديل الملف الشخصي' }}
+        />
+        <Stack.Screen
+          name="MyBookings"
+          component={MyBookings}
+          options={{ headerShown: true, title: 'حجوزاتي' }}
+
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -117,5 +172,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    direction: 'rtl',
   },
 });

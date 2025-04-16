@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, Image } from 'react-native';
+import { View, Image, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
 import { auth, createUserWithEmailAndPassword } from '../firebase-config';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
@@ -11,16 +12,18 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [age, setAge] = useState('');
   const [medicalHistory, setMedicalHistory] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme();
 
   const handleRegister = async () => {
     if (!name || !email || !password || !age || !medicalHistory) {
       alert("من فضلك املأ جميع الحقول");
       return;
     }
-    if (password.length < 6) {  
-      alert("يجب أن تكون كلمة المرور 6 أحرف على الأقل");       
+    if (password.length < 6) {
+      alert("يجب أن تكون كلمة المرور 6 أحرف على الأقل");
       return;
-    }                                                                 
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("صيغة البريد الإلكتروني غير صحيحة");
@@ -30,7 +33,6 @@ const RegisterScreen = ({ navigation }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // إضافة بيانات المستخدم إلى Firestore
       await setDoc(doc(firestore, 'users', user.uid), {
         name,
         email,
@@ -38,26 +40,146 @@ const RegisterScreen = ({ navigation }) => {
         medicalHistory,
       });
 
-      navigation.navigate('login'); 
+      navigation.navigate('login');
     } catch (error) {
       console.error('Error registering user:', error.message);
+      if (error.code === 'auth/email-already-in-use') {
+        alert('هذا البريد الإلكتروني مستخدم بالفعل');
+      } else {
+        alert('حدث خطأ أثناء إنشاء الحساب، حاول مرة أخرى');
+      }
     }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-      <View style={{ alignItems: 'center', marginBottom: 20 }}>
-        <Image source={require('../assets/logo.png')} style={{ width: 100, height: 100 }} />
-        <Text style={{ fontSize: 24, fontWeight: 'bold' }}>MediCross</Text>
-      </View>
-      <TextInput placeholder="الاسم" value={name} onChangeText={setName} style={{ borderWidth: 1, marginBottom: 10, padding: 8 }} />
-      <TextInput placeholder="البريد الإلكتروني" value={email} onChangeText={setEmail} style={{ borderWidth: 1, marginBottom: 10, padding: 8 }} />
-      <TextInput placeholder="كلمة المرور" value={password} onChangeText={setPassword} secureTextEntry style={{ borderWidth: 1, marginBottom: 10, padding: 8 }} />
-      <TextInput placeholder="العمر" value={age} onChangeText={setAge} keyboardType="numeric" style={{ borderWidth: 1, marginBottom: 10, padding: 8 }} />
-      <TextInput placeholder="التاريخ المرضي" value={medicalHistory} onChangeText={setMedicalHistory} style={{ borderWidth: 1, marginBottom: 10, padding: 8 }} />
-      <Button title="إنشاء حساب" onPress={handleRegister} />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Surface style={styles.surface} elevation={4}>
+          <View style={styles.logoContainer}>
+            <Image source={require('../assets/logo.png')} style={styles.logo} />
+            <Text variant="headlineMedium" style={styles.title}>MediCross</Text>
+          </View>
+
+          <TextInput
+            label="الاسم"
+            value={name}
+            onChangeText={setName}
+            mode="outlined"
+            style={styles.input}
+            left={<TextInput.Icon icon="account" />}
+          />
+
+          <TextInput
+            label="البريد الإلكتروني"
+            value={email}
+            onChangeText={setEmail}
+            mode="outlined"
+            style={styles.input}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            left={<TextInput.Icon icon="email" />}
+          />
+
+          <TextInput
+            label="كلمة المرور"
+            value={password}
+            onChangeText={setPassword}
+            mode="outlined"
+            style={styles.input}
+            secureTextEntry={!showPassword}
+            right={<TextInput.Icon icon={showPassword ? "eye-off" : "eye"} onPress={() => setShowPassword(!showPassword)} />}
+            left={<TextInput.Icon icon="lock" />}
+          />
+
+          <TextInput
+            label="العمر"
+            value={age}
+            onChangeText={setAge}
+            mode="outlined"
+            style={styles.input}
+            keyboardType="numeric"
+            left={<TextInput.Icon icon="calendar" />}
+          />
+
+          <TextInput
+            label="التاريخ المرضي"
+            value={medicalHistory}
+            onChangeText={setMedicalHistory}
+            mode="outlined"
+            style={styles.input}
+            multiline
+            numberOfLines={3}
+            left={<TextInput.Icon icon="medical-bag" />}
+          />
+
+          <Button
+            mode="contained"
+            onPress={handleRegister}
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+          >
+            إنشاء حساب
+          </Button>
+
+          <Button
+            mode="text"
+            onPress={() => navigation.navigate('login')}
+            style={styles.linkButton}
+          >
+            لديك حساب بالفعل؟ سجل دخول
+          </Button>
+        </Surface>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  surface: {
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: 'white',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 10,
+  },
+  title: {
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  button: {
+    marginTop: 10,
+    paddingVertical: 6,
+    backgroundColor: '#00587b',
+
+  },
+  buttonContent: {
+    height: 48,
+  },
+  linkButton: {
+    marginTop: 16,
+  },
+});
 
 export default RegisterScreen;
