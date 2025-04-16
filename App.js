@@ -1,19 +1,21 @@
-
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import WelcomeScreen from './screens/WelcomeScreen';
-import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import HomeScreen from './screens/HomeScreen';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-// import DoctorsScreen from './screens/DoctorsScreen';
+
+// استيراد الشاشات
+import WelcomeScreen from './screens/WelcomeScreen';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import HomeScreen from './screens/HomeScreen';
 import PharmacyScreen from './screens/PharmacyScreen';
 import MedicinesScreen from './screens/MedicinesScreen';
 import MedicalContentScreen from './screens/MedicalContentScreen';
-// import ProfileScreen from './screens/ProfileScreen';
+import DoctorCalling from './screens/DoctorCalling';
+import DoctorsListPage from './screens/DoctorsListPage';
+import ChatScreen from './screens/ChatScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,8 +35,6 @@ const MainApp = () => {
             iconName = focused ? 'medkit' : 'medkit-outline';
           } else if (route.name === 'محتوى طبي') {
             iconName = focused ? 'book' : 'book-outline';
-          } else if (route.name === 'حسابي') {
-            iconName = focused ? 'person' : 'person-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -48,10 +48,9 @@ const MainApp = () => {
       })}
     >
       <Tab.Screen name="الرئيسية" component={HomeScreen} />
-       {/* <Tab.Screen name="الأطباء" component={DoctorsScreen} /> */}
-      <Tab.Screen name="الصيدلية" component={PharmacyScreen} /> 
+      <Tab.Screen name="الأطباء" component={DoctorCalling} />
+      <Tab.Screen name="الصيدلية" component={PharmacyScreen} />
       <Tab.Screen name="محتوى طبي" component={MedicalContentScreen} />
-      {/* <Tab.Screen name="حسابي" component={ProfileScreen} />  */}
     </Tab.Navigator>
   );
 };
@@ -62,35 +61,51 @@ export default function App() {
       <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen 
-          options={{ 
-            headerShown: false, 
-            animation: "fade_from_bottom", 
-            animationDuration: 3000 
-          }} 
           name="Welcome" 
           component={WelcomeScreen} 
+          options={{ 
+            headerShown: false,
+            animation: "fade_from_bottom",
+          }} 
         />
         <Stack.Screen 
-          options={{ headerShown: false }} 
           name="login" 
           component={LoginScreen} 
+          options={{ headerShown: false }} 
         />
         <Stack.Screen 
-          options={{ headerShown: false }} 
           name="register" 
           component={RegisterScreen} 
+          options={{ headerShown: false }} 
         />
         <Stack.Screen 
-          options={{ headerShown: false }} 
           name="home" 
           component={MainApp} 
+          options={{ headerShown: false }} 
         />
         <Stack.Screen 
-        options={{ headerShown: false }} 
-        name="MedicinesScreen" 
-        component={MedicinesScreen} 
+          name="MedicinesScreen" 
+          component={MedicinesScreen} 
+          options={{ headerShown: false }} 
         />
-
+        <Stack.Screen 
+          name="DoctorsList" 
+          component={DoctorsListPage} 
+          options={{ 
+            headerShown: true,
+            title: 'قائمة الأطباء',
+            headerBackTitle: 'رجوع',
+          }} 
+        />
+        <Stack.Screen 
+          name="Chat" 
+          component={ChatScreen} 
+          options={{ 
+            headerShown: true,
+            title: 'الدردشة مع الطبيب',
+            headerBackTitle: 'رجوع',
+          }} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -103,4 +118,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-}); 
+});
