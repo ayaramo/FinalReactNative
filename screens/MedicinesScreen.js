@@ -121,8 +121,8 @@ const MedicinesScreen = () => {
 export default MedicinesScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f3f4f6', padding: 12, marginTop: 20 },
-  header: { fontSize: 20, fontWeight: 'bold', textAlign: 'right', marginBottom: 10, color: '#09243c' },
+  container: { flex: 1, backgroundColor: '#f3f4f6', padding: 12, marginTop: 20 , paddingTop: 40,},
+  header: { fontSize: 20, fontWeight: 'bold', textAlign: 'left', marginBottom: 10, color: '#09243c' },
   filterContainer: { marginBottom: 16 },
   input: {
     borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 10, backgroundColor: '#fff', textAlign: 'right', width: '95%', marginLeft: 10, marginRight: 10,

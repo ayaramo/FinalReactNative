@@ -65,11 +65,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 16,
     paddingHorizontal: 12,
+    paddingTop: 40,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'right',
+    textAlign: 'left',
     marginTop: 20,
     marginBottom: 16,
     paddingRight: 32,

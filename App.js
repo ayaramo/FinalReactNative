@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { StyleSheet , I18nManager } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,6 +28,15 @@ const Tab = createBottomTabNavigator();
 
 // تبويب الصفحات الرئيسية داخل التطبيق بعد تسجيل الدخول
 const MainApp = () => {
+
+  useEffect(() => {
+    if (!I18nManager.isRTL) {
+      I18nManager.forceRTL(true);
+      I18nManager.allowRTL(true);
+      // بمجرد التفعيل، لازم تعمل إعادة تشغيل للتطبيق بالكامل
+    }
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -129,6 +139,8 @@ export default function App() {
           component={MyChats}
           options={{ title: 'محادثاتي' }} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ title: 'الدردشة' }} />
+
+        <Stack.Screen name="PharmacyScreen" component={PharmacyScreen} options={{ headerShown: false , title: 'الصيدلية' }} />
 
       </Stack.Navigator>
     </NavigationContainer>

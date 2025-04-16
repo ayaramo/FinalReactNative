@@ -11,7 +11,7 @@ export default function MyBookings() {
     const fetchAppointments = async () => {
       try {
         const q = query(
-          collectionGroup(db, 'appointments'),
+          collectionGroup(db, 'PatientBookings'),
           where('userId', '==', userId)
         );
         const querySnapshot = await getDocs(q);

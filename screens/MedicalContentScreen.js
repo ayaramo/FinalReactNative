@@ -48,14 +48,16 @@ const ArticlesScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: '#fff',
+    flex: 1,
+    paddingTop: 60,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
+    alignItems: 'center',
   },
   card: {
     backgroundColor: '#f5f5f5',
@@ -66,9 +68,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    direction: 'rtl',
-    textAlign: 'right',
-    alignItems: 'flex-start', 
+    textAlign: 'center',
+    alignItems: 'center', 
 
   },
   image: {

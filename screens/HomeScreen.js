@@ -46,7 +46,7 @@ const services = [
     id: '3',
     title: 'اشتر أدويتك',
     icon: 'local-pharmacy',
-    screen: 'Pharmacy',
+    screen: 'PharmacyScreen',
     color: '#FF9800'
   }
 ];
@@ -159,6 +159,9 @@ const HomeScreen = ({ navigation }) => {
             value={searchQuery}
             style={styles.searchbar}
             iconColor={theme.colors.primary}
+            inputStyle={{ writingDirection: 'rtl' }} // تحديد الكتابة من اليمين لليسار
+            direction="rtl" // تحديد اتجاه الكتابة      
+            textAlign="right" // محاذاة النص لليمين          
           />
 
           <View style={styles.categoriesContainer}>
@@ -170,6 +173,8 @@ const HomeScreen = ({ navigation }) => {
                   onPress={() => setSelectedCategory(category)}
                   style={styles.categoryButton}
                   labelStyle={styles.categoryButtonLabel}
+                  buttonColor={selectedCategory === category ? '#2196F3' : undefined} // اللون الأزرق الداكن
+                  textColor={selectedCategory === category ? '#fff' : '#2196F3'} 
                 >
                   {category}
                 </Button>
@@ -262,7 +267,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     marginBottom: 16,
-    textAlign: 'right',
+    textAlign: 'left',
     color: '#333',
   },
   servicesContainer: {
