@@ -30,9 +30,9 @@ const categories = [
 const services = [
   {
     id: '1',
-    title: 'احجز موعد مع طبيب متخصص',
+    title: 'احجز موعد  متخصص',
     icon: 'event-available',
-    screen: 'BookAppointment',
+    screen: 'Doctorlist',
     color: '#4CAF50'
   },
   {
@@ -112,15 +112,15 @@ const HomeScreen = ({ navigation }) => {
 
   const filteredDoctors = doctors.filter(doctor => {
     if (!doctor) return false;
-    
+
     const name = doctor.name ? doctor.name.toLowerCase() : '';
     const specialty = doctor.specialty ? doctor.specialty : '';
-    
+
     const matchesCategory = selectedCategory === 'الكل' || specialty === selectedCategory;
-    const matchesSearch = searchQuery === '' || 
-                         name.includes(searchQuery.toLowerCase()) || 
-                         specialty.toLowerCase().includes(searchQuery.toLowerCase());
-    
+    const matchesSearch = searchQuery === '' ||
+      name.includes(searchQuery.toLowerCase()) ||
+      specialty.toLowerCase().includes(searchQuery.toLowerCase());
+
     return matchesCategory && matchesSearch;
   });
 
@@ -152,7 +152,7 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={styles.doctorsSection}>
           <Text variant="titleLarge" style={styles.sectionTitle}>أطباؤنا المميزون</Text>
-          
+
           <Searchbar
             placeholder="ابحث عن طبيب..."
             onChangeText={setSearchQuery}
@@ -174,7 +174,7 @@ const HomeScreen = ({ navigation }) => {
                   style={styles.categoryButton}
                   labelStyle={styles.categoryButtonLabel}
                   buttonColor={selectedCategory === category ? '#2196F3' : undefined} // اللون الأزرق الداكن
-                  textColor={selectedCategory === category ? '#fff' : '#2196F3'} 
+                  textColor={selectedCategory === category ? '#fff' : '#2196F3'}
                 >
                   {category}
                 </Button>
@@ -195,7 +195,7 @@ const HomeScreen = ({ navigation }) => {
               <Text variant="bodyLarge" style={styles.noResultsText}>لا يوجد أطباء متاحين</Text>
             </Surface>
           )}
-          
+
           <Button
             mode="contained"
             onPress={() => navigation.navigate('Doctors')}
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  
+
   },
   header: {
     flexDirection: 'row',
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 16,
   },
-  
+
   pharmacyButton: {
     backgroundColor: '#2196F3',
   },

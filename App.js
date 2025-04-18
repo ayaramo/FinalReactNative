@@ -23,6 +23,10 @@ import ProfileScreen from './screens/ProfileScreen';
 import EditProfile from './screens/EditProfile';
 import MyBookings from './screens/MyBookings';
 
+
+import Doctorlist from './screens/Doctorlist';
+
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -125,6 +129,18 @@ export default function App() {
             headerBackTitle: 'رجوع',
           }}
         />
+
+
+
+<Stack.Screen
+          name="Doctorlist"
+          component={Doctorlist}
+          options={{ headerShown: false }}
+        />
+
+
+
+        
         <Stack.Screen
           name="EditProfile"
           component={EditProfile}
