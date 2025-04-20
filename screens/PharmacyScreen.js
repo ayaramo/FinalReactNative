@@ -70,11 +70,11 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'left',
+    textAlign: 'right',
     marginTop: 20,
     marginBottom: 16,
     paddingRight: 32,
-    color: '#09243c',
+    color: '#004f59',
   },
   grid: {
     justifyContent: 'center',
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 8,
     fontSize: 16,
-    fontWeight: '500',
-    color: '#09243c',
+    fontWeight: 'bold',
+    color: '#004f59',
     textAlign: 'center',
   },
 });

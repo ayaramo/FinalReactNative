@@ -13,6 +13,8 @@ import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
 import PharmacyScreen from './screens/PharmacyScreen';
 import MedicinesScreen from './screens/MedicinesScreen';
+import Cart from './screens/Cart';
+import Checkout from './screens/Checkout';
 import MedicalContentScreen from './screens/MedicalContentScreen';
 import MyChats from './screens/MyChats';
 import DoctorCalling from './screens/DoctorCalling';
@@ -109,6 +111,16 @@ export default function App() {
         <Stack.Screen
           name="MedicinesScreen"
           component={MedicinesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cart"
+          component={Cart}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Checkout"
+          component={Checkout}
           options={{ headerShown: false }}
         />
         <Stack.Screen
