@@ -76,9 +76,8 @@ const HomeScreen = ({ navigation }) => {
       setLoading(false);
     }
   };
-
   const renderServiceCard = ({ item }) => (
-    <Surface style={[styles.serviceCard, { backgroundColor: item.color }]} elevation={4}>
+    <Surface style={[styles.serviceCard, { backgroundColor: item.color }]} elevation={4} key={item.id}>
       <TouchableOpacity
         style={styles.serviceCardContent}
         onPress={() => navigation.navigate(item.screen)}
@@ -88,15 +87,23 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
     </Surface>
   );
-
+  
   const renderDoctorCard = ({ item }) => (
-    <Surface style={styles.doctorCard} elevation={2}>
+    <Surface style={styles.doctorCard} elevation={2} key={item.id}>
       <TouchableOpacity
         onPress={() => navigation.navigate('DoctorDetails', { doctor: item })}
       >
         <Image
-          source={{ uri: item.image }}
-          style={styles.doctorImage}
+
+source={
+  item.image
+    ? { uri: item.image }
+    : require("../assets/Avatar-Doctor.jpg") // عدلي المسار حسب مكان الصورة
+  }
+
+
+
+           style={styles.doctorImage}
         />
         <View style={styles.doctorInfo}>
           <Text variant="titleMedium" style={styles.doctorName}>د. {item.name}</Text>
@@ -109,6 +116,7 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
     </Surface>
   );
+  
 
   const filteredDoctors = doctors.filter(doctor => {
     if (!doctor) return false;
