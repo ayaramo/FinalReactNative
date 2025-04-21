@@ -149,34 +149,47 @@ const DoctorsList = () => {
   }
 
   const renderDoctor = ({ item }) => (
-
-
-
     <Card style={styles.card}>
       <Card.Cover
         source={
           item.image
             ? { uri: item.image }
-            : require("../assets/Avatar-Doctor.jpg") // عدلي المسار حسب مكان الصورة
+            : require("../assets/Avatar-Doctor.jpg")
         }
       />
-
-
-
-
-
-
-
-
-
-
       <Card.Content>
         <Title style={styles.name}>{item.name}</Title>
-        <Paragraph>التخصص: {item.specialty}</Paragraph>
-        <Paragraph>المحافظة: {item.governorate}</Paragraph>
-        <Paragraph>السعر: {item.price} جنيه</Paragraph>
-        <Paragraph>⭐ {item.review}/5</Paragraph>
+
+        <View style={styles.infoRow}>
+          <View style={styles.iconWrapper}>
+            <Icon name="stethoscope" size={14} color="#fff" />
+          </View>
+          <Text style={styles.infoText}>التخصص: {item.specialty}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <View style={styles.iconWrapper}>
+            <Icon name="map-marker" size={14} color="#fff" />
+          </View>
+          <Text style={styles.infoText}>المحافظة: {item.governorate}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <View style={styles.iconWrapper}>
+            <Icon name="money" size={14} color="#fff" />
+          </View>
+          <Text style={styles.infoText}>السعر: {item.price} جنيه</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <View style={styles.iconWrapper}>
+            <Icon name="star" size={14} color="#fff" />
+          </View>
+          <Text style={styles.infoText}>التقييم: ⭐ {item.review}/5</Text>
+        </View>
       </Card.Content>
+
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
@@ -187,26 +200,26 @@ const DoctorsList = () => {
         >
           <Text style={styles.buttonText}>احجز الموعد</Text>
         </TouchableOpacity>
-        <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          transparent={true}
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>حجز الموعد </Text>
+        {selectedDoctorId === item.id && isModalVisible && (
+  <Modal
+    visible={true}
+    animationType="slide"
+    transparent={true}
+    onRequestClose={closeModal}
+  >
+    <View style={styles.modalOverlay}>
+      <View style={styles.modalContent}>
+        <Text style={styles.modalTitle}>حجز الموعد</Text>
 
+        <BookingPage doctorId={selectedDoctorId} closeModal={closeModal} />
 
-              {/* استخدام selectedDoctorId هنا */}
-              <BookingPage doctorId={selectedDoctorId} closeModal={closeModal} />
-
-              <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>إغلاق</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>إغلاق</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </Modal>
+)}
 
       </View>
 
@@ -293,6 +306,7 @@ const DoctorsList = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     padding: 12,
@@ -347,13 +361,43 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 4,
   },
+  infoRow: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    marginVertical: 4,
+  },
+  iconWrapper: {
+    backgroundColor: "#004f59",
+    borderRadius: 50,
+    width: 26,
+    height: 26,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 8,
+  },
+  infoText: {
+    fontSize: 15,
+    color: "#333",
+    fontFamily: "Cairo",
+    textAlign: "right",
+    flexShrink: 1,
+  },
   name: {
     fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 4,
+    fontSize: 17,
+    fontFamily: "Cairo",
+    textAlign: "right",
+    marginBottom: 8,
+    color: "#222",
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+    marginTop: 8,
   },
   button: {
-    backgroundColor: '#08473a',
+    backgroundColor: '#193849',
     padding: 10,
     borderRadius: 8,
     alignItems: 'center',
@@ -393,18 +437,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  buttonContainer: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  modalOverlay: {
-    flex: 1,
-    // backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'center',   // لمنتصف الشاشة رأسيًا
-    alignItems: 'center',       // لمنتصف الشاشة أفقيًا (ده المهم لمحور السينات)
-  },
-
   modalSheet: {
     backgroundColor: "#fff",
     paddingVertical: 20,
@@ -413,7 +445,7 @@ const styles = StyleSheet.create({
     width: '90%',
     maxHeight: "80%",
     elevation: 6,
-    alignSelf: 'center',        // تأكيد إضافي للتمركز أفقيًا
+    alignSelf: 'center',
   },
   modalHandle: {
     width: 40,
